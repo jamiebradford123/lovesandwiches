@@ -12,8 +12,31 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
-sales = SHEET.worksheet('sales')
+def get_sales_data():
+    """
+    get sales data figures input form user
+    """
+    print("Please enter sales data from todays sales")
+    print("Data should be six numbers and seperated by commas")
+    print("Example: 1,2,3,4,5,6\n")
 
-data = sales.get_all_values()
+    data_str = input("Enter your data here: ")
+    
+    sales_data = data_str.split(",")
+    validate_data(sales_data)
 
-print(data)
+def validate_data(values):
+    """
+    convert all string values to integers, raise error if strings cannot be converted, 
+    or there isnt exaxtly six values
+    """
+    try:
+        if len(values) != 6:
+            raise ValueError(
+                f"Exactly 6 values required, you entered {len(values)}"
+            )
+
+    except ValueError as e:
+        print(f"invalid data: {e}, please try again")
+
+get_sales_data()
